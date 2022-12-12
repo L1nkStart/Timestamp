@@ -1,6 +1,6 @@
 // index.js
 // where your node app starts
-
+var port = '3500';
 // init project
 var express = require('express');
 var app = express();
@@ -26,7 +26,33 @@ app.get("/api/hello", function (req, res) {
 
 
 
+app.get("/api/time/:fecha", function (req, res) {
+  var fechas = req.params.fecha
+  let fecha
+
+  if(!fechas){
+    fecha = new Date()
+  }else{
+    if(isNaN(fechas)){
+      fecha = new Date((fechas))
+    }else {
+      fecha = new Date(parseInt(fechas))
+    }
+  }
+  if (fecha.toString() == 'Invalid Date'){
+    res.json({ error: fecha.toString() })
+  }else{
+    res.json({ unix: fecha.getTime(), utc: fecha.toUTCString() })
+  }
+});
+
+
+
+
+
+
+
 // listen for requests :)
-var listener = app.listen(process.env.PORT, function () {
+var listener = app.listen(port, function () {
   console.log('Your app is listening on port ' + listener.address().port);
 });
